@@ -136,3 +136,41 @@ function WiekszyObwod(prost1, prost2) {
 
 //zad 6 na gorze - w class Prostokat
 console.log(p1.ZmienNazwe("Choroszcz"));
+
+
+
+let liczby = [3, 4, 5, 8, 11, 12, 13, 19, 18, 22, 98, 65,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9];
+
+let suma = liczby.reduce(function(acc, curr) {
+  return acc + curr;
+});
+console.log("Suma wartości: ", suma);
+
+let parzyste = liczby.filter(function(num) {
+  return num % 2 === 0;
+});
+console.log("Liczby parzyste: ", parzyste);
+
+let pomnozone = liczby.map(function(num) {
+  return num * 3;
+});
+console.log("Liczby pomnożone: ", pomnozone);
+
+
+let album = 67218;
+liczby.push(album);
+let indexAlbumu = liczby.indexOf(album);
+console.log("Index albumu: ", indexAlbumu);
+
+let srednia = suma / liczby.length;
+console.log("Średnia arytmetyczna: ", srednia);
+
+let najwieksza = Math.max.apply(null, liczby);
+console.log("Największa liczba: ", najwieksza);
+
+
+let wartosc = 9;
+let wystapienia = liczby.filter(function(num) {
+  return num === wartosc;
+}).length;
+console.log("Liczba wystąpień wartości ", wartosc, ": ", wystapienia);
