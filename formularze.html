@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lab 7 </title>
+    
+</head>
+<body>
+  <form>
+    <label for="imie">Imię :</label>
+    <input type="text" id="imie" name="imie"><br>
+
+    <label for="nazwisko">Nazwisko:</label>
+    <input type="text" id="nazwisko" name="nazwisko"><br>
+
+    <label for="haslo">Hasło:</label>
+    <input type="password" id="haslo" name="haslo"><br>
+
+    <label for="plec">Płeć:</label>
+    <select id="plec" name="plec" >
+      <option value="mezczyzna">Mężczyzna</option>
+      <option value="kobieta">Kobieta</option>
+      <option value="krzesło">🪑</option>      
+      <option value="slayyyy">💅🏿</option>      
+         
+    </select><br>
+
+    <label for="phone">Telefon:</label>
+    <input type="tel" id="telefon" name="telefon" ><br>
+
+    <label for="uro">Data urodzenia:</label>
+    <input type="date" id="uro" name="uro" ><br>
+
+    <label for="country">Kraj:</label>
+    <input type="text" id="kraj" name="kraj" ><br>
+
+    <input type="submit" value="Zapisz">
+  </form>
+  <script>
+    window.onload = function() {
+        const form = document.querySelector('form');
+        form.addEventListener('submit', validateForm);
+    };
+
+    function validateForm(event) {
+        event.preventDefault();
+        
+        const imieInput = document.getElementById('imie');
+        const nazwiskoInput = document.getElementById('nazwisko');
+        const hasloInput = document.getElementById('haslo');
+        const plecInput = document.getElementById('plec');
+        const telefonInput = document.getElementById('telefon');
+        const uroInput = document.getElementById('uro');
+        const krajInput = document.getElementById('kraj');
+        
+        resetValidation();
+
+        if (!checkValue(imieInput)) {
+            setCustomValidity(imieInput, 'Pole "Imię" jest wymagane.');
+        }
+        
+        if (!checkValue(nazwiskoInput)) {
+            setCustomValidity(nazwiskoInput, 'Pole "Nazwisko" jest wymagane.');
+        }
+
+        if (!checkValue(hasloInput)) {
+            setCustomValidity(hasloInput, 'Pole "Hasło" jest wymagane.');
+        } else if (!checkPasswordStrength(hasloInput.value)) {
+            setCustomValidity(hasloInput, 'Hasło jest zbyt słabe. Musi zawierać co najmniej 8 znaków, w tym jedną dużą literę, jedną małą literę i jedną liczbę.');
+        }
+
+        if (!checkValue(telefonInput)) {
+            setCustomValidity(telefonInput, 'Pole "Telefon" jest wymagane.');
+        } else if (!checkPhoneNumber(telefonInput.value)) {
+            setCustomValidity(telefonInput, 'Nieprawidłowy format numeru telefonu. Wprowadź numer w formacie: 000-000-000.');
+        }
+
+        if (!checkValue(uroInput)) {
+            setCustomValidity(uroInput, '"Data urodzenia"');
+        }
+
+        if (!checkValue(krajInput)) {
+            setCustomValidity(krajInput, '"Kraj" ');
+        }
+
+        if (form.checkValidity()) {
+            alert('Formularz został poprawnie wypełniony.');
+            form.reset();
+        }
+    }
+
+    function checkValue(input) {
+        return input.value.trim() !== '';
+    }
+
+    function checkPasswordStrength(password) {
+        const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$/;
+        return passwordRegex.test(password);
+    }
+
+    function checkPhoneNumber(phoneNumber) {
+        const phoneRegex = /^\d{3}-\d{3}-\d{3}$/;
+        return phoneRegex.test(phoneNumber);
+    }
+
+    function setCustomValidity(input, message) {
+        input.setCustomValidity(message);
+        input.reportValidity();
+    }
+
+    function resetValidation() {
+const inputs = document.getElementsByTagName('input');
+for (let i = 0; i < inputs.length; i++) {
+inputs[i].setCustomValidity('');
+}
+}
+
+</script>
+</body>
+</html>

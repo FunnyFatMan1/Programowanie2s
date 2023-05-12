@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lab 7</title>
+    <style>
+        .error-message {
+            color: red;
+        }
+    </style>
+    
+</head>
+<body>
+    <form>
+        <label for="imie">Imię :</label>
+        <input type="text" id="imie" name="imie">
+        <span id="imie-error" class="error-message"></span><br>
+
+        <label for="nazwisko">Nazwisko:</label>
+        <input type="text" id="nazwisko" name="nazwisko">
+        <span id="nazwisko-error" class="error-message"></span><br>
+
+        <label for="haslo">Hasło:</label>
+        <input type="password" id="haslo" name="haslo">
+        <span id="haslo-error" class="error-message"></span><br>
+
+        <label for="powtorz-haslo">Powtórz hasło:</label>
+        <input type="password" id="powtorz-haslo" name="powtorz-haslo">
+        <span id="powtorz-haslo-error" class="error-message"></span><br>
+
+        <label for="plec">Płeć:</label>
+        <select id="plec" name="plec">
+            <option value="mezczyzna">Mężczyzna</option>
+            <option value="kobieta">Kobieta</option>      
+        </select><br>
+
+        <label for="telefon">Telefon:</label>
+        <input type="tel" id="telefon" name="telefon">
+        <span id="telefon-error" class="error-message"></span><br>
+
+        <label for="uro">Data urodzenia:</label>
+        <input type="date" id="uro" name="uro">
+        <span id="uro-error" class="error-message"></span><br>
+
+        <label for="kraj">Kraj:</label>
+        <input type="text" id="kraj" name="kraj">
+        <span id="kraj-error" class="error-message"></span><br>
+
+        <input type="submit" value="Zapisz">
+    </form>
+
+    <script>
+        window.onload = function() {
+            const form = document.querySelector('form');
+            form.addEventListener('submit', validateForm);
+        };
+
+        function validateForm(event) {
+            event.preventDefault();
+            
+            const imieInput = document.getElementById('imie');
+            const nazwiskoInput = document.getElementById('nazwisko');
+            const hasloInput = document.getElementById('haslo');
+            const powtorzHasloInput = document.getElementById('powtorz-haslo');
+            const plecInput = document.getElementById('plec');
+            const telefonInput = document.getElementById('telefon');
+            const uroInput = document.getElementById('uro');
+            const krajInput = document.getElementById('kraj');
+            
+            resetValidation();
+
+            if (!checkValue(imieInput)) {
+                setCustomValidity(imieInput, 'Pole "Imię" jest wymagane.', 'imie-error');
+            }
+            
+            if (!checkValue(nazwiskoInput)) {
+                setCustomValidity(nazwiskoInput, 'Pole "Nazwisko" jest wymagane.', 'nazwisko-error');
+            }
+
+            if (!checkValue(hasloInput)) {
+                setCustomValidity(hasloInput, 'Pole "Hasło" jest wymagane.', 'haslo-error');
+            } else if (!checkPasswordStrength(hasloInput.value)) {
+                setCustomValidity(hasloInput, 'Hasło jest zbyt słabe. Musi zawierać co najmniej 8 znaków, w tym jedną dużą literę, jedną małą literę i jedną liczbę.', 'haslo-error');
+            }
+
+            if (!checkValue(powtorzHasloInput)) {
+                setCustomValidity(powtorzHasloInput, 'Pole "Powtórz hasło" jest wymagane.', 'powtorz-haslo-error');
+            } else if (hasloInput.value !== powtorzHasloInput.value) {
+                setCustomValidity(powtorzHasloInput, 'Pole "Powtórz hasło" musi być takie samo jak pole "Hasło".', 'powtorz-haslo-error');
+            }
+
+            if (!checkValue(telefonInput)) {
+                setCustomValidity(telefonInput, 'Pole "Telefon" jest wymagane.', 'telefon-error');
+            } else if (!checkPhoneNumber(telefonInput.value)) {
+                setCustomValidity(telefonInput, 'Nieprawidłowy format numeru telefonu. Wprowadź numer w formacie: 000-000-000.', 'telefon-error');
+            }
+
+            if (!checkAge(uroInput.value)) {
+                setCustomValidity(uroInput, 'Musisz być pełnoletni/a, aby wypełnić formularz.', 'uro-error');
+            }
+
+            if (!checkValue(krajInput)) {
+                setCustomValidity(krajInput, 'Pole "Kraj" jest wymagane.', 'kraj-error');
+            }
+
+            if (form.checkValidity()) {
+                alert('Formularz został poprawnie wypełniony.');
+                form.reset();
+            }
+        }
+
+        function checkValue(input) {
+            return input.value.trim() !== '';
+        }
+
+        function checkPasswordStrength(password) {
+            const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$/;
+            return passwordRegex.test(password);
+        }
+
+        function checkPhoneNumber(phoneNumber) {
+            const phoneRegex = /^\d{3}-\d{3}-\d{3}$/;
+            return phoneRegex.test(phoneNumber);
+        }
+
+        function checkAge(dateString) {
+            const today = new Date();
+            const birthDate = new Date(dateString);
+            const age = today.getFullYear() - birthDate.getFullYear();
+            const monthDiff = today.getMonth() - birthDate.getMonth();
+            
+            if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDate.getDate())) {
+                return age - 1;
+            }
+            
+            return age;
+        }
+
+        function setCustomValidity(input, message, errorId) {
+            const errorMessage = document.getElementById(errorId);
+            input.setCustomValidity(message);
+            input.reportValidity();
+            errorMessage.textContent = message;
+        }
+        function resetValidation() {
+            const errorMessages = document.getElementsByClassName('error-message');
+            for (let i = 0; i < errorMessages.length; i++) {
+                errorMessages[i].textContent = '';
+            }
+        }
+    </script>
+</body>
+</html>
