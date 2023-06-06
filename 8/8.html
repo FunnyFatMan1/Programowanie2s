@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lab 7</title>
+    <style>
+        .error-message {
+            color: red;
+        }
+    </style>
+    
+</head>
+<body>
+    <form>
+        <!-- Existing fields omitted for brevity -->
+
+        <label for="kraj">Kraj:</label>
+        <input type="text" id="kraj" name="kraj" onchange="checkCountry()">
+        <span id="kraj-error" class="error-message"></span><br>
+
+        <label for="wojewodztwo">Województwo:</label>
+        <input type="text" id="wojewodztwo" name="wojewodztwo" disabled>
+        <span id="wojewodztwo-error" class="error-message"></span><br>
+
+        <label for="adres-zamieszkania">Adres zamieszkania:</label>
+        <input type="text" id="adres-zamieszkania" name="adres-zamieszkania" disabled>
+        <span id="adres-zamieszkania-error" class="error-message"></span><br>
+
+        <label for="check-adres">Adres korespondencyjny jest taki sam jak adres zamieszkania:</label>
+        <input type="checkbox" id="check-adres" name="check-adres" checked onchange="toggleAdresKorespondencyjny()"><br>
+
+        <label for="adres-korespondencyjny" style="display:none">Adres korespondencyjny:</label>
+        <input type="text" id="adres-korespondencyjny" name="adres-korespondencyjny" style="display:none" disabled>
+
+        <input type="submit" value="Zapisz">
+    </form>
+
+    <script>
+        // Existing code omitted for brevity
+
+        function checkCountry() {
+            const krajInput = document.getElementById('kraj');
+            const wojewodztwoInput = document.getElementById('wojewodztwo');
+            if (krajInput.value.toLowerCase() === 'polska') {
+                wojewodztwoInput.disabled = false;
+                wojewodztwoInput.innerHTML = '<option value="">Wybierz...</option><option value="mazowieckie">Mazowieckie</option><option value="lubelskie">Lubelskie</option>...'; // Add all "wojewodztwa"
+            } else {
+                wojewodztwoInput.disabled = true;
+                wojewodztwoInput.type = "text";
+                wojewodztwoInput.value = '';
+            }
+        }
+
+        function toggleAdresKorespondencyjny() {
+            const checkAdresInput = document.getElementById('check-adres');
+            const adresKorespondencyjnyLabel = document.querySelector('label[for="adres-korespondencyjny"]');
+            const adresKorespondencyjnyInput = document.getElementById('adres-korespondencyjny');
+            if (!checkAdresInput.checked) {
+                adresKorespondencyjnyLabel.style.display = "block";
+                adresKorespondencyjnyInput.style.display = "block";
+                adresKorespondencyjnyInput.disabled = false;
+            } else {
+                adresKorespondencyjnyLabel.style.display = "none";
+                adresKorespondencyjnyInput.style.display = "none";
+                adresKorespondencyjnyInput.disabled = true;
+                adresKorespondencyjnyInput.value = '';
+            }
+        }
+
+        function validateForm(event) {
+            // Existing code omitted for brevity
+
+            const wojewodztwoInput = document.getElementById('wojewodztwo');
+            const adresZamieszkaniaInput = document.getElementById('adres-zamieszkania');
+            const checkAdresInput = document.getElementById('check-adres');
+            const adresKorespondencyjnyInput = document.getElementById('adres-korespondencyjny');
+
+            if (!checkValue(wojewodztwoInput) && wojewodztwoInput.disabled == false) {
+                setCustomValidity(wojewodztwoInput, 'Pole "Województwo" jest wymagane.', 'wojewodztwo-error');
+            }
+
+            if (!checkValue(adresZamieszkaniaInput) && adresZamieszkaniaInput.disabled == false) {
+                setCustomValidity(adresZamieszkaniaInput, 'Pole "Adres zamieszkania" jest wymagane.', 'adres-zamieszkania-error');
+            }
+
+            if (!checkAdresInput.checked && !checkValue(adresKorespondencyjnyInput)) {
+                setCustomValidity(adresKorespondencyjnyInput, 'Pole "Adres korespondencyjny" jest wymagane.', 'adres-korespondencyjny-error');
+            }
+
+            // Existing code omitted for brevity
+        }
+
+        // Function checkPhoneNumber is now as follows:
+        function checkPhoneNumber(phoneNumber) {
+            return !isNaN(phoneNumber);
+        }
+    </script>
+</body>
+</html>
